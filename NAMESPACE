@@ -1,0 +1,7 @@
+S3method(coef,l0araxx)
+S3method(predict,l0araxx)
+export(l0araxx)
+import(graphics)
+import(stats)
+importFrom(Rcpp,evalCpp)
+useDynLib(libaglm)

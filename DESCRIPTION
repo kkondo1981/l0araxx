@@ -1,0 +1,13 @@
+Package: libaglm
+Type: Package
+Title: Features for Accurate GLM Project
+Version: 0.1
+Date: 2018-08-04
+Author: Kenji Kondo
+Maintainer: Kenji Kondo <kkondo.odnokk@gmail.com>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+Imports: Rcpp (>= 0.12.6)
+LinkingTo: Rcpp, RcppArmadillo
+LazyData: TRUE
+NeedsCompilation: yes
