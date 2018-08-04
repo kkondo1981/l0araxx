@@ -34,6 +34,7 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
 
   int iter;
   for (iter = 0; iter <= maxit; ++iter) {
+    Rcout << '+' << std::flush;
     old_beta = beta;
     Xbeta = X * beta;
 
