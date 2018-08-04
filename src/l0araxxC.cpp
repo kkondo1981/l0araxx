@@ -33,8 +33,9 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
   DXt = trans(X);
 
   int iter;
-  for (iter = 0; iter <= maxit; ++iter) {
+  for (iter = 1;; ++iter) {
     Rcout << '+' << std::flush;
+
     old_beta = beta;
     Xbeta = X * beta;
 
@@ -58,6 +59,7 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
       break;
     } else if (iter >= maxit) {
       warning("Did not converge. Increase maxit.");
+      break;
     }
   }
 

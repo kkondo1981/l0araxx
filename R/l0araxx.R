@@ -64,7 +64,7 @@ l0araxx <- function(x, y, weights = NULL, offset = NULL,
 
   # create obj and return it
   obj <- list(beta = drop(out$beta),
-              beta_hist = out$beta_hist,
+              beta_hist = t(out$beta_hist[, 1:(out$iter + 1)]),
               df = sum(out$beta != 0),
               lambda = lambda,
               iter = out$iter,
