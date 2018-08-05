@@ -1,6 +1,14 @@
 
-predict.l0araxx <- function(obj, newx, type=c("link", "response", "coefficients", "class"), ...) {
+predict.l0araxx <- function(obj, newx, type=c("link", "response", "coefficients", "class"), offset=NULL, ...) {
+  np = dim(newx)
   type <- match.arg(type)
+
+  # check offset
+  if (is.null(offset)) {
+    offset <- rep(0, np[1])
+  } else if (length(offset) != np[1]) {
+    stop("length of offset not equal to the length of newx")
+  }
 
   # getting coefficients
   beta <- coef.l0araxx(obj)
@@ -12,7 +20,7 @@ predict.l0araxx <- function(obj, newx, type=c("link", "response", "coefficients"
   newx <- cbind(rep(1, np[1]), newx)
 
   # calculates link value
-  eta <- newx %*% beta
+  eta <- newx %*% beta + offset
   if (type=="link") return(drop(eta))
 
   # calculates response var
