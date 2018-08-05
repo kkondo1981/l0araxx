@@ -69,6 +69,14 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
     }
   }
 
+  for (int i = 0; i < m; ++i) {
+    for (int j = 0; j <= iter; ++j) {
+      if (std::abs(beta_hist(i, j)) < 1e-3) {
+        beta_hist(i, j) = 0;
+      }
+    }
+  }
+
   return List::create(Named("beta") = beta,
                       Named("iter") = iter,
                       Named("beta_hist") = beta_hist);
