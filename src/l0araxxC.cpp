@@ -17,14 +17,19 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
   arma::mat DXt(m, n);
   arma::mat yy(n, 1);
   arma::mat Xbeta(n, 1);
+  arma::mat mu(n, 1);
   arma::mat V(n, n);
   arma::mat z(n, 1);
   arma::mat Pm(m, m);
 
-  if (family=="gaussian") {
+  if (family == "gaussian") {
     beta(0) = mean(y);
-  } else if (family=="poisson") {
+  } else if (family == "poisson") {
     beta(0) = log(mean(y/exp(offset)));
+  } else if (family == "gamma") {
+    beta(0) = 1 / mean(y);
+  } else if (family == "gamma(log)") {
+    beta(0) = log(mean(y));
   }
   beta_hist.col(0) = beta;
 
@@ -39,13 +44,22 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
     old_beta = beta;
     Xbeta = X * beta;
 
-    if (family=="gaussian") {
-      yy = weights % (y - Xbeta);
+    if (family == "gaussian") {
+      mu = Xbeta;
+      yy = weights % (y - mu);
       V = diagmat(vec(weights));
-    }
-    if (family=="poisson") {
-      yy = weights % (y - exp(Xbeta + offset));
-      V = diagmat(vec(weights % exp(Xbeta + offset)));
+    } else if (family == "poisson") {
+      mu = exp(Xbeta + offset);
+      yy = weights % (y - mu);
+      V = diagmat(vec(weights % mu));
+    } else if (family == "gamma") {
+      mu = 1 / Xbeta;
+      yy = -weights % (y - mu);
+      V = diagmat(vec(weights % mu % mu));
+    } else if (family == "gamma(log)") {
+      mu = exp(Xbeta);
+      yy = weights % (y - mu) % exp(1 / mu);
+      V = diagmat(vec(-weights % (square(mu % exp(1 / mu)) + (y - mu) % exp(1 / mu))));
     }
 
     z = V * Xbeta + yy;

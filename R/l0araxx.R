@@ -1,6 +1,6 @@
 
 l0araxx <- function(x, y, weights = NULL, offset = NULL,
-                    family = c("gaussian", "logit", "gamma", "poisson", "inv.gaussian"),
+                    family = c("gaussian", "poisson", "gamma", "gamma(log)"),
                     lambda, standardize = TRUE, maxit = 10^3, eps = 1e-04)
 {
   x0 <- x
