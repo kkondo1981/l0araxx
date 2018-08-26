@@ -38,6 +38,7 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
   DXt = trans(X);
 
   int iter;
+  Rcout << "Iteration... " << std::flush;
   for (iter = 1;; ++iter) {
     Rcout << '+' << std::flush;
 
@@ -58,8 +59,8 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
       V = diagmat(vec(weights % mu % mu));
     } else if (family == "gamma(log)") {
       mu = exp(Xbeta);
-      yy = weights % (y - mu) % exp(1 / mu);
-      V = diagmat(vec(-weights % (square(mu % exp(1 / mu)) + (y - mu) % exp(1 / mu))));
+      yy = weights % (y / mu - 1);
+      V = diagmat(vec(weights % (y / mu)));
     }
 
     z = V * Xbeta + yy;
@@ -76,6 +77,7 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
       break;
     }
   }
+  Rcout << std::endl;
 
   for (int i = 0; i < m; ++i) {
     if (std::abs(beta(i, 0)) < 1e-3) {

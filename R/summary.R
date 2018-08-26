@@ -26,10 +26,9 @@ predict.l0araxx <- function(obj, newx, type=c("link", "response", "coefficients"
   # calculates response var
   response <- switch(obj$family,
                      gaussian = eta,
-                     logit = exp(eta)/(1+exp(eta)),
                      poisson = exp(eta),
                      gamma = 1/eta,
-                     inv.gaussian = 1/sqrt(eta))
+                     'gamma(log)' = exp(eta))
   if(obj$family == "gaussian" & obj$standardize) response <- response + mean(obj$y)
   if (type=="response") return(drop(response))
 

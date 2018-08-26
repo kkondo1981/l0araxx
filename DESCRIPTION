@@ -1,7 +1,7 @@
 Package: libaglm
 Type: Package
 Title: Features for Accurate GLM Project
-Version: 0.1
+Version: 0.2
 Date: 2018-08-04
 Author: Kenji Kondo
 Maintainer: Kenji Kondo <kkondo.odnokk@gmail.com>
