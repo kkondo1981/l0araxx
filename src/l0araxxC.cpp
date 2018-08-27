@@ -6,7 +6,7 @@ using namespace Rcpp;
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
-              String family, double lambda, int maxit, double eps)
+              String family, double lambda, int maxit, double eps, arma::vec beta_init)
 {
   // initialization
   int n = X.n_rows;
@@ -22,15 +22,7 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
   arma::mat z(n, 1);
   arma::mat Pm(m, m);
 
-  if (family == "gaussian") {
-    beta(0) = mean(y);
-  } else if (family == "poisson") {
-    beta(0) = log(mean(y/exp(offset)));
-  } else if (family == "gamma") {
-    beta(0) = 1 / mean(y);
-  } else if (family == "gamma(log)") {
-    beta(0) = log(mean(y));
-  }
+  beta = beta_init;
   beta_hist.col(0) = beta;
 
   Pm = eye(m,m);

@@ -7,8 +7,8 @@
 using namespace Rcpp;
 
 // l0araxxC
-List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset, String family, double lambda, int maxit, double eps);
-RcppExport SEXP _libaglm_l0araxxC(SEXP XSEXP, SEXP ySEXP, SEXP weightsSEXP, SEXP offsetSEXP, SEXP familySEXP, SEXP lambdaSEXP, SEXP maxitSEXP, SEXP epsSEXP) {
+List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset, String family, double lambda, int maxit, double eps, arma::vec beta_init);
+RcppExport SEXP _libaglm_l0araxxC(SEXP XSEXP, SEXP ySEXP, SEXP weightsSEXP, SEXP offsetSEXP, SEXP familySEXP, SEXP lambdaSEXP, SEXP maxitSEXP, SEXP epsSEXP, SEXP beta_initSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,13 +20,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
-    rcpp_result_gen = Rcpp::wrap(l0araxxC(X, y, weights, offset, family, lambda, maxit, eps));
+    Rcpp::traits::input_parameter< arma::vec >::type beta_init(beta_initSEXP);
+    rcpp_result_gen = Rcpp::wrap(l0araxxC(X, y, weights, offset, family, lambda, maxit, eps, beta_init));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_libaglm_l0araxxC", (DL_FUNC) &_libaglm_l0araxxC, 8},
+    {"_libaglm_l0araxxC", (DL_FUNC) &_libaglm_l0araxxC, 9},
     {NULL, NULL, 0}
 };
 

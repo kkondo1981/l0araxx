@@ -1,10 +1,12 @@
 
+
 # Define valid family names here, because defining it when use lead
 # parsing error of some editors' syntax highlighting.
 VALID_FAMILY_NAMES <- c("gaussian", "poisson", "gamma", "gamma(log)")
 
 l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
-                    lambda, standardize=TRUE, maxit=10^3, eps = 1e-04)
+                    lambda, standardize=TRUE, maxit=10^3, eps = 1e-04,
+                    beta_init=NULL)
 {
   x0 <- x
   y0 <- y
@@ -62,8 +64,18 @@ l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
   # In case of gaussian, centering the outcome vector 'y' 
   if(family == "gaussian" & standardize) y <- y - mean(y)
 
+  # set default value of initial beta if beta_init=NULL
+  if (is.null(beta_init)) {
+    mu <- switch(family,
+                'gaussian' = mean(y),
+                'poisson' = log(mean(y/exp(offset))),
+                'gamma' = 1 / mean(y),
+                'gamma(log)' = log(mean(y)))
+    beta_init = c(mu, numeric(np[2]))
+  }
+
   # do estimation and return
-  out <- l0araxxC(x, y, weights, offset, family, lambda, maxit, eps)
+  out <- l0araxxC(x, y, weights, offset, family, lambda, maxit, eps, beta_init)
 
   # create obj and return it
   obj <- list(beta = drop(out$beta),
