@@ -1,9 +1,5 @@
 
-# Define valid family names here, because defining it when use lead
-# parsing error of some editors' syntax highlighting.
-VALID_FAMILY_NAMES <- c("gaussian", "poisson", "gamma", "gamma(log)")
-
-l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
+l0araxx <- function(x, y, weights=NULL, offset=NULL, family="gaussian",
                     lambda, standardize=TRUE, maxit=10^3, eps = 1e-04,
                     beta_init=NULL, eta_init = beta_init)
 {
@@ -54,7 +50,10 @@ l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
     stop("length of offset not equal to the length of y")
   }
 
-  family <- match.arg(family)
+  if (!(family %in% c("gaussian", "poisson", "gamma", "gamma(log)"))) {
+    valid_families <- cat(family, sep=',')
+    stop("family should be one of %s", valid_families)
+  }
 
   # standardize the design matrix 'x' if needed, and enhance it
   if (standardize) x <- scale(x)
