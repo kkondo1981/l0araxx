@@ -1,5 +1,4 @@
 
-
 # Define valid family names here, because defining it when use lead
 # parsing error of some editors' syntax highlighting.
 VALID_FAMILY_NAMES <- c("gaussian", "poisson", "gamma", "gamma(log)")
@@ -79,7 +78,6 @@ l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
   # do estimation and return
   out <- l0araxxC(x, y, weights, offset, family, lambda, maxit, eps,
                   beta_init, eta_init)
-                  
 
   # create obj and return it
   obj <- list(beta = drop(out$beta),
