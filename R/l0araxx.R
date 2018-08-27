@@ -1,7 +1,10 @@
 
-l0araxx <- function(x, y, weights = NULL, offset = NULL,
-                    family = c("gaussian", "poisson", "gamma", "gamma(log)"),
-                    lambda, standardize = TRUE, maxit = 10^3, eps = 1e-04)
+# Define valid family names here, because defining it when use lead
+# parsing error of some editors' syntax highlighting.
+VALID_FAMILY_NAMES <- c("gaussian", "poisson", "gamma", "gamma(log)")
+
+l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
+                    lambda, standardize=TRUE, maxit=10^3, eps = 1e-04)
 {
   x0 <- x
   y0 <- y
