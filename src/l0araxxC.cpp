@@ -6,7 +6,8 @@ using namespace Rcpp;
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
-              String family, double lambda, int maxit, double eps, arma::vec beta_init)
+              String family, double lambda, int maxit, double eps,
+              arma::vec beta_init, arma::vec eta_init)
 {
   // initialization
   int n = X.n_rows;
@@ -24,10 +25,10 @@ List l0araxxC(arma::mat X, arma::vec y, arma::vec weights, arma::vec offset,
 
   beta = beta_init;
   beta_hist.col(0) = beta;
+  DXt = trans(repmat(trans(eta_init % eta_init), n, 1) % X);
 
   Pm = eye(m,m);
   Pm(0, 0) = 0;
-  DXt = trans(X);
 
   int iter;
   Rcout << "Iteration... " << std::flush;

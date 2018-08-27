@@ -6,7 +6,7 @@ VALID_FAMILY_NAMES <- c("gaussian", "poisson", "gamma", "gamma(log)")
 
 l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
                     lambda, standardize=TRUE, maxit=10^3, eps = 1e-04,
-                    beta_init=NULL)
+                    beta_init=NULL, eta_init = beta_init)
 {
   x0 <- x
   y0 <- y
@@ -64,18 +64,22 @@ l0araxx <- function(x, y, weights=NULL, offset=NULL, family=VALID_FAMILY_NAMES,
   # In case of gaussian, centering the outcome vector 'y' 
   if(family == "gaussian" & standardize) y <- y - mean(y)
 
-  # set default value of initial beta if beta_init=NULL
   if (is.null(beta_init)) {
+    # If no beta_init and eta_init are given, use same initial vectors as l0ara package.
+    # For more details, see https://github.com/cran/l0ara/blob/master/src/l0araC.cpp#L22-L38
     mu <- switch(family,
                 'gaussian' = mean(y),
                 'poisson' = log(mean(y/exp(offset))),
                 'gamma' = 1 / mean(y),
                 'gamma(log)' = log(mean(y)))
     beta_init = c(mu, numeric(np[2]))
+    eta_init = rep(1, length(beta_init))
   }
 
   # do estimation and return
-  out <- l0araxxC(x, y, weights, offset, family, lambda, maxit, eps, beta_init)
+  out <- l0araxxC(x, y, weights, offset, family, lambda, maxit, eps,
+                  beta_init, eta_init)
+                  
 
   # create obj and return it
   obj <- list(beta = drop(out$beta),
